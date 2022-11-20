@@ -1,0 +1,13 @@
+@import 'base';
+@import "font";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  html {
+    font-family: 'cubic', system-ui, sans-serif;
+  }
+}
