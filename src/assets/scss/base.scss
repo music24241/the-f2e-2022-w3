@@ -15,3 +15,31 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.step2-jira-line {
+  width: 48px;
+  height: 20px;
+  border: solid 4px #FF60FA;
+  border-color: #FF60FA transparent transparent transparent;
+  transform: rotate(180deg);
+  border-radius: 50%/80% 80% 0 0;
+
+  &::before,
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #FF60FA;
+  }
+  &::before {
+    top: 1px;
+    left: 1.2px;
+  }
+  &::after {
+    top: 0.77px;
+    right: 0.86px;
+  }
+}

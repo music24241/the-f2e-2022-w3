@@ -7,6 +7,9 @@ module.exports = {
         primary: {
           100: "#FFCB2D",
         },
+        info: {
+          100: "#5137FF",
+        },
         secondary: {
           100: "#E0E0E0",
           200: "#FFF9F6",
@@ -16,6 +19,9 @@ module.exports = {
           100: "#FF60FA",
         },
       },
+      borderWidth: {
+        3: "3px",
+      },
       borderRadius: {
         "4xl": "36px",
       },
@@ -24,6 +30,7 @@ module.exports = {
       },
       width: {
         10: "10%",
+        30: "30%",
       },
     },
   },

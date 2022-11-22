@@ -11,3 +11,34 @@
     font-family: 'cubic', system-ui, sans-serif;
   }
 }
+
+@layer components {
+  .cat {
+    @apply inline-flex h-[120px] w-[478px] cursor-pointer items-center justify-center bg-left bg-no-repeat pt-[27px] text-center text-2xl;
+
+    &.blue-cat {
+      @apply bg-[url('/public/blue_cat_normal.png')]
+    }
+    &.yellow-cat {
+      @apply bg-[url('/public/yellow_cat_normal.png')]
+    }
+
+    .cat-face {
+      position: absolute;
+      top: 0;
+      left: 28px;
+      &::before,
+      &::after {
+        content: '';
+        display: block;
+        border-radius: 16px;
+        width: 6px;
+        height: 12px;
+        background-color: #FFF9F6;
+      }
+      &::before {
+        margin-right: 35px;
+      }
+    }
+  }
+}
