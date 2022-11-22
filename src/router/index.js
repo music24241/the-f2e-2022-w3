@@ -18,12 +18,20 @@ const router = createRouter({
       component: () => import("../views/Step2View.vue"),
     },
     {
-      path: "/about",
-      name: "about",
+      path: "/dnd",
+      name: "dnd",
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue"),
+      component: () => import("../views/DnDView.vue"),
+    },
+    {
+      path: "/dnd-list",
+      name: "DnDList",
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import("../views/DnDListView.vue"),
     },
   ],
 });
