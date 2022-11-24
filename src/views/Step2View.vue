@@ -16,7 +16,7 @@
           class="h-full w-30 bg-primary-100 transition duration-150 ease-in-out"
         ></div>
       </div>
-      <section class="relative flex text-2.5xl text-secondary-200">
+      <section class="relative mb-8 flex text-2.5xl text-secondary-200">
         <div class="absolute top-[-160px] left-[48px] z-10 flex items-start">
           <img src="public/po_sit.png" alt="po_sit" class="mr-14" />
           <div
@@ -38,19 +38,26 @@
         <!--left-->
         <div class="mr-3 flex-1 rounded-4xl bg-secondary-300 py-8 px-6">
           <ul class="flex h-full flex-col justify-end">
-            <li class="cat blue-cat mb-1">
-              <div class="cat-face"></div>
-              會員系統<br />
-              (登入、註冊、權限管理)
-            </li>
-            <li class="cat yellow-cat ml-auto mb-1">應徵者的線上履歷編輯器</li>
-            <li class="cat blue-cat mb-1">
-              前台職缺列表 <br />
-              (職缺詳情、點擊應徵)
-            </li>
-            <li class="cat yellow-cat ml-auto">
-              後台職缺管理功能<br />
-              (資訊上架下架、應徵者資料)
+            <li
+              v-for="(originProductBacklog, idx) in originProductBacklogList"
+              :key="idx"
+            >
+              <DragBox
+                dragging-class="opacity-0"
+                :custom-class="originProductBacklog.class"
+                :item="originProductBacklog"
+                :is-dropped="
+                  productBacklogList.some(
+                    (productBacklog) =>
+                      productBacklog.lastDroppedItem?.key ===
+                      originProductBacklog.key
+                  )
+                "
+                is-dropped-class="opacity-0"
+              >
+                <div class="cat-face"></div>
+                <span v-html="originProductBacklog.text"></span>
+              </DragBox>
             </li>
           </ul>
         </div>
@@ -60,35 +67,117 @@
             產品代辦清單 Product Backlog
           </div>
           <ul>
-            <li
-              class="mb-4 cursor-pointer rounded-[60px] border-3 border-dashed border-primary-100 py-9 text-center text-2xl text-primary-100 hover:bg-primary-100 hover:bg-opacity-20"
-            >
-              優先度最高
-            </li>
-            <li
-              class="mb-4 cursor-pointer rounded-[60px] border-3 border-dashed border-primary-100 py-9 text-center text-2xl text-primary-100 hover:bg-primary-100 hover:bg-opacity-20"
-            >
-              優先度最高
-            </li>
-            <li
-              class="mb-4 cursor-pointer rounded-[60px] border-3 border-dashed border-primary-100 py-9 text-center text-2xl text-primary-100 hover:bg-primary-100 hover:bg-opacity-20"
-            >
-              優先度最高
-            </li>
-            <li
-              class="cursor-pointer rounded-[60px] border-3 border-dashed border-primary-100 py-9 text-center text-2xl text-primary-100 hover:bg-primary-100 hover:bg-opacity-20"
-            >
-              優先度最高
+            <li v-for="(productBacklog, idx) in productBacklogList" :key="idx">
+              <DropBox
+                @drop="handleDrop(idx, $event)"
+                :last-dropped-item="productBacklog.lastDroppedItem"
+              >
+                <template v-slot:default>
+                  <div
+                    class="h-[111px] cursor-pointer rounded-[60px] border-3 border-dashed border-primary-100 py-9 text-center text-2xl text-primary-100 hover:bg-primary-100 hover:bg-opacity-20"
+                    :class="{ 'mb-4': idx !== productBacklogList.length - 1 }"
+                  >
+                    {{ productBacklog.title }}
+                  </div>
+                </template>
+                <template v-slot:dropped>
+                  <div
+                    class="relative flex h-[111px] cursor-pointer items-center rounded-[60px] border-primary-100 bg-primary-100 pl-10 pr-24 text-center text-xl text-secondary-300 text-primary-100"
+                    :class="{ 'mb-4': idx !== productBacklogList.length - 1 }"
+                  >
+                    <div class="cat-face yellow-cat-face"></div>
+                    <img src="public/equal.png" alt="equal" class="mr-auto" />
+                    <span
+                      v-html="productBacklog.lastDroppedItem?.text"
+                      class="mx-auto"
+                    ></span>
+                  </div>
+                </template>
+              </DropBox>
             </li>
           </ul>
         </div>
       </section>
+      <button
+        :disabled="!checkValid"
+        class="mx-auto w-fit rounded-2xl py-6 px-8 text-[32px]"
+        :class="[
+          checkValid
+            ? 'bg-danger-100 bg-secondary-400'
+            : 'bg-secondary-400 text-secondary-200',
+        ]"
+      >
+        完成清單
+      </button>
     </div>
   </main>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import DragBox from "../components/DragBox.vue";
+import DropBox from "../components/DropBox.vue";
 
 const step = ref(1);
+
+const originProductBacklogList = ref([
+  {
+    key: "1",
+    class: "relative cat blue-cat mb-1",
+    draggingClass: "",
+    text: "會員系統<br />(登入、註冊、權限管理)",
+  },
+  {
+    key: "2",
+    class: "relative cat yellow-cat ml-auto mb-1",
+    text: "應徵者的線上履歷編輯器",
+  },
+  {
+    key: "3",
+    class: "relative cat blue-cat mb-1",
+    text: "前台職缺列表 <br />(職缺詳情、點擊應徵)",
+  },
+  {
+    key: "4",
+    class: "relative cat yellow-cat ml-auto",
+    text: "後台職缺管理功能<br />(資訊上架下架、應徵者資料)",
+  },
+]);
+
+const productBacklogList = ref([
+  {
+    lastDroppedItem: null,
+    title: "優先度最高",
+  },
+  {
+    lastDroppedItem: null,
+    title: "優先度高",
+  },
+  {
+    lastDroppedItem: null,
+    title: "優先度中",
+  },
+  {
+    lastDroppedItem: null,
+    title: "優先度低",
+  },
+]);
+
+const handleDrop = (idx, item) => {
+  console.log(idx, item);
+  // const { id, title } = item;
+  // droppedBoxNames.value.push(name);
+  productBacklogList.value[idx].lastDroppedItem = item;
+};
+
+const checkValid = computed(() => {
+  const result = ["2", "3", "1", "4"];
+  return (
+    productBacklogList.value.length === originProductBacklogList.value.length &&
+    productBacklogList.value.every(
+      (productBacklog, idx) =>
+        productBacklog.lastDroppedItem?.key === result[idx]
+    )
+  );
+});
 </script>

@@ -1,7 +1,11 @@
 <template>
   <div
     :ref="dragSource"
-    :class="[customClass, dragCollect.isDragging ? draggingClass : '']"
+    :class="[
+      customClass,
+      dragCollect.isDragging ? draggingClass : '',
+      isDropped ? isDroppedClass : '',
+    ]"
   >
     <slot></slot>
   </div>
@@ -12,7 +16,7 @@ import { useDrag } from "vue3-dnd";
 const props = defineProps({
   id: {
     type: String,
-    required: true,
+    // required: true,
   },
   item: {
     type: [String, Object],
@@ -25,6 +29,14 @@ const props = defineProps({
   draggingClass: {
     type: String,
     default: null,
+  },
+  isDroppedClass: {
+    type: String,
+    default: null,
+  },
+  isDropped: {
+    type: Boolean,
+    default: false,
   },
 });
 
